@@ -12,14 +12,21 @@ As an original image you should use png pic with a transparent background.
 
 ## How it works
 
-| Get an image | Create a shade | Find a contour | Extend the shade |
-|-----|----|----|-----|
-| ![](assets/how-it-works/step-0.svg) | ![](assets/how-it-works/step-1.svg) | ![](assets/how-it-works/step-2.svg) | ![](assets/how-it-works/step-3.svg) |
+| Get an image                        | Create a shade                      |
+|-------------------------------------|-------------------------------------|
+| ![](assets/how-it-works/step-0.svg) | ![](assets/how-it-works/step-1.svg) |
 
+| Find a contour                      | Extend the shade                    |
+|-------------------------------------|-------------------------------------|
+| ![](assets/how-it-works/step-2.svg) | ![](assets/how-it-works/step-3.svg) |
 
-| Color it black | Trace a shade | Remove filling | Сombine with image |
-|----------------|---------------|----------------|--------------------|
-| ![](assets/how-it-works/step-4.svg) | ![](assets/how-it-works/step-5.svg) | ![](assets/how-it-works/step-6.svg) | ![](assets/how-it-works/step-7.svg)
+| Color it black                      | Trace a shade                       |
+|-------------------------------------|-------------------------------------|
+| ![](assets/how-it-works/step-4.svg) | ![](assets/how-it-works/step-5.svg) |
+
+| Remove filling                      | Сombine with image                  |
+|-------------------------------------|-------------------------------------|
+| ![](assets/how-it-works/step-6.svg) | ![](assets/how-it-works/step-7.svg) |
 
 <!-- ## Usage
 
