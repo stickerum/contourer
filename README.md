@@ -1,68 +1,48 @@
 # Contourer
 
-Tool for creating svg contours for stickers images.
+Tool for creating svg contours for images.
+
+![](docs/assets/contourer-app.gif)
 
 ## Example
 
-| **Original image**            | **Contour with margin 0**       | **Contour with margin 10**       |
-|-------------------------------|---------------------------------|----------------------------------|
-| ![](assets/examples/phil.png) | ![](assets/examples/phil_0.svg) | ![](assets/examples/phil_10.svg) |
-
 As an original image you should use png pic with a transparent background.
 
-## How it works
+| **Original image**            | **color: `red`<br>margin: `0`**       | **color: `blue`<br>margin: `10`**       |
+|-------------------------------|---------------------------------|----------------------------------|
+| ![](docs/assets/examples/phil.png) | ![](docs/assets/examples/phil_red_0.svg) | ![](docs/assets/examples/phil_blue_10.svg) |
 
-| Get an image                        | Create a shade                      |
-|-------------------------------------|-------------------------------------|
-| ![](assets/how-it-works/step-0.svg) | ![](assets/how-it-works/step-1.svg) |
+[How it works](docs/how-it-works.md)
 
-| Find a contour                      | Extend the shade                    |
-|-------------------------------------|-------------------------------------|
-| ![](assets/how-it-works/step-2.svg) | ![](assets/how-it-works/step-3.svg) |
+## Usage
 
-| Color it black                      | Trace a shade                       |
-|-------------------------------------|-------------------------------------|
-| ![](assets/how-it-works/step-4.svg) | ![](assets/how-it-works/step-5.svg) |
+Download version for your OS from releases.
 
-| Remove filling                      | Сombine with image                  |
-|-------------------------------------|-------------------------------------|
-| ![](assets/how-it-works/step-6.svg) | ![](assets/how-it-works/step-7.svg) |
-
-<!-- ## Usage
-
-...
-
-## Development
-
-To run your local copy of Contourer for development follow these steps
-
-### Install
+Run app with path to image as an argument.
 
 ```sh
-
+./contourer-linux path/to/image.png
 ```
+
+Vectorized copy of image with contour will be created near the source file. It will have the same name and `.svg` extension.
+
+### Customization
+
+Set up contour color with `color` (default: `pink`) arg.
 
 ```sh
-$ npm i
+./contourer-linux path/to/image.png --color=blue
 ```
 
-### Run Contourer
-
-To process image with Contourer pass path to this image
+You can set `margin` (default: `0`).
 
 ```sh
-$ npm start <path-to-file>
+./contourer-linux path/to/image.png --margin=10
 ```
 
-### Pack binaries
+## Improvements
 
-Create a single binary file to use Contourer on production by the following script.
-
-```sh
-$ npm run pack
-```
-
-Binaries for Linux, macOS and Windows will be created in `build` directory. -->
+Fork me and feel free to ask questions, report bugs and open pull requests. Check out [developer's guide](docs/how-it-works.md).
 
 ## License
 
