@@ -1,6 +1,6 @@
 # Contourer
 
-Tool to make svg contours for stickers images.
+Tool for creating svg contours for stickers images.
 
 ## Example
 

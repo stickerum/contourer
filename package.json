@@ -1,10 +1,10 @@
 {
-  "name": "contourer",
-  "version": "1.0.0",
-  "description": "Create svg of base64-encoded image and its contour",
+  "name": "Contourer",
+  "version": "1.1.0",
+  "description": "Tool for creating svg of base64-encoded image and its contour",
   "scripts": {
     "start": "node src/index.js",
-    "pack": "pkg src/index.js --output ./build/contourer -t linux,macos"
+    "pack": "pkg src/index.js --output ./build/contourer -t linux,macos,win"
   },
   "author": {
     "name": "Taly Guryn",
@@ -16,7 +16,8 @@
     "minimist": "^1.2.0",
     "node-base64-image": "^1.0.4",
     "potrace": "git+https://github.com/stickerum/node-potrace.git",
-    "simple-node-logger": "^0.93.33"
+    "simple-node-logger": "^0.93.33",
+    "tinycolor2": "^1.4.1"
   },
   "devDependencies": {
     "pkg": "^4.3.0"

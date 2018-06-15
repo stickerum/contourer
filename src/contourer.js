@@ -1,4 +1,8 @@
 /**
+ * REFACTORING IS REQUIRED
+ */
+
+/**
  * Code helpers
  */
 const tools = require('./tools');
@@ -10,6 +14,7 @@ const fs = require('fs');
 const Jimp = require('jimp');
 const log = require('./logger');
 const potrace = require('potrace');
+const tinycolor = require("tinycolor2");
 
 /**
  * @class Contourer
@@ -33,9 +38,17 @@ class Contourer {
 
     this.config = {
       debug: false,
-      radius: 0,
-      fillColor: 0x000000FF,
-      contourColor: 0x000000FF
+      margin: 0,
+      threshold: 0,
+      fillColor: 'black',
+      debugContourColor: 'black',
+      contourColor: 'blue'
+    };
+
+    this.hexColors = {
+      fillColor: this.colorTextToHex(this.config.fillColor),
+      debugContourColor: this.colorTextToHex(this.config.debugContourColor),
+      contourColor: this.colorTextToHex(this.config.contourColor)
     };
 
     this.image = null;
@@ -98,92 +111,92 @@ class Contourer {
    *
    * @returns {Promise<void>}
    */
-  process() {
+  async process() {
 
-    return Promise.resolve()
-      .then(() => {
-        return log.info('Process image');
-      })
-      .then(() => {
-        let shade = [];
+    await log.info('Process image');
 
-        return new Promise((resolve, reject) => {
-          this.image.scan(0, 0, this.size.width, this.size.height, (x, y, idx) => {
+    let shade = [];
 
-            let pixelColor = this.image.getPixelColor(x, y),
-                colorObject = Jimp.intToRGBA(pixelColor);
+    /**
+     * Use alpha mask
+     * Color all non transparent pixels
+     *
+     * @steps x * y
+     */
+    await this.image.scan(0, 0, this.size.width, this.size.height, (x, y, idx) => {
+      let pixelColor = this.image.getPixelColor(x, y),
+          colorObject = Jimp.intToRGBA(pixelColor);
 
-            if (colorObject.a) {
-              this.image.setPixelColor(this.config.fillColor, x, y);
-              shade.push([x, y])
-            }
-          }, (err) => {
-            if (err) {
-              reject(err);
-            }
+      if (colorObject.a > this.config.threshold) {
+        this.image.setPixelColor(this.hexColors.fillColor, x, y);
+        shade.push([x, y])
+      }
+    });
 
-            resolve(shade);
-          });
-      })})
-      .then((shade) => {
-        let contour = [];
+    let contour = [];
 
-        shade.forEach((pixel) => {
-          let x = pixel[0],
-              y = pixel[1],
-              isContour = false;
+    /**
+     * Detect pixels on the image border
+     *
+     * @steps shade * 9
+     */
+    await shade.forEach((pixel) => {
+      let x = pixel[0],
+        y = pixel[1],
+        isContour = false;
 
-          for (let i = x-1; i <= x+1; i++) {
-            if (isContour) {
-              break;
-            }
+      for (let i = x - 1; i <= x + 1; i++) {
+        if (isContour) {
+          break;
+        }
 
-            for (let j = y-1; j <= y+1; j++) {
-              let pixelColor = this.image.getPixelColor(i, j),
-                  colorObject = Jimp.intToRGBA(pixelColor);
+        for (let j = y - 1; j <= y + 1; j++) {
+          let pixelColor = this.image.getPixelColor(i, j),
+            colorObject = Jimp.intToRGBA(pixelColor);
 
-              if (!colorObject.a) {
-                contour.push([x, y]);
-                isContour = true;
-                break;
-              }
+          if (!colorObject.a) {
+            contour.push([x, y]);
+            isContour = true;
+            break;
+          }
+        }
+      }
+    });
+
+    /**
+     * Create margins
+     *
+     * @steps contour * (margin ** 2)
+     */
+    await contour.forEach((pixel) => {
+      let margin = this.config.margin,
+        x = pixel[0],
+        y = pixel[1];
+
+      for (let i = x - margin; i <= x + margin; i++) {
+        for (let j = y - margin; j <= y + margin; j++) {
+          if (margin * margin >= ((x - i) * (x - i) + (y - j) * (y - j))) {
+            try {
+              this.image.setPixelColor(this.hexColors.fillColor, i, j);
+            } catch (e) {
+              console.log(e);
             }
           }
-        });
+        }
+      }
+    });
 
-        return contour;
-      })
-      .then((contour) => {
-        contour.forEach((pixel) => {
-          let radius = this.config.radius,
-              x = pixel[0],
-              y = pixel[1];
+    /**
+     * Paint contour with special debug color
+     */
+    if (this.config.debug) {
+      await contour.forEach((pixel) => {
+        let x = pixel[0],
+          y = pixel[1];
 
-          for (let i = x - radius; i <= x + radius; i++) {
-            for (let j = y - radius; j <= y + radius; j++) {
-              if (radius * radius >= ((x - i) * (x - i) + (y - j) * (y - j))) {
-                try {
-                  this.image.setPixelColor(this.config.fillColor, i, j);
-                } catch (e) {
-                  console.log(e);
-                }
-              }
-            }
-          }
-        });
-
-        return contour;
-      })
-      .then((contour) => {
-        contour.forEach((pixel) => {
-          let x = pixel[0],
-              y = pixel[1];
-
-          this.image.setPixelColor(this.config.contourColor, x, y);
-        });
-
-        return contour;
+        this.image.setPixelColor(this.hexColors.debugContourColor, x, y);
       });
+    }
   }
 
   /**
@@ -193,7 +206,7 @@ class Contourer {
    * @returns {Promise<void>}
    */
   async createContour() {
-    log.info('Create SVG contour');
+    await log.info('Create SVG contour');
 
     /**
      * Save raw svg to the variable this.svgContour
@@ -201,14 +214,17 @@ class Contourer {
     return new Promise((resolve, reject) => {
       try {
         let params = {
+          /** Do not fill svg contoured area with color */
           color: 'none',
-          outline: 'red'
+
+          /** Set color for contour */
+          outline: this.config.contourColor,
         };
 
         /**
          * Create SVG contours by tracing target image
          *
-         * @see https://github.com/talyguryn/node-potrace
+         * @see https://github.com/stickerum/node-potrace
          */
         potrace.trace(this.image, params, (err, svg) => {
           if (err) {
@@ -236,7 +252,7 @@ class Contourer {
    * @returns {Promise<void>}
    */
   async encodeImage() {
-    log.info('Encode image');
+    await log.info('Encode image');
 
     if (this.config.debug) {
       /**
@@ -293,7 +309,7 @@ class Contourer {
    * Append encoded image to the end of SVG body
    */
   async mergeSvgAndEncodedBitmapImage() {
-    log.info('Merge SVG and encoded image');
+    await log.info('Merge SVG and encoded image');
 
     /**
      * Register xlink param in SVG code
@@ -323,11 +339,15 @@ class Contourer {
    * @returns {String} - output file path
    */
   async saveSVG() {
-    log.info('Save result SVG image');
+    await log.info('Save result SVG image');
 
     await fs.writeFileSync(this.outputImagePath, this.resultSVG);
 
     return this.outputImagePath
+  }
+
+  colorTextToHex (colorText) {
+    return parseInt(tinycolor(colorText).toHex8(), 16);
   }
 }
 
