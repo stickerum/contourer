@@ -4,9 +4,9 @@ Tool to make svg contours for stickers images.
 
 ## Example
 
-| **Original image** | **Contour with margin 0** | **Contour with margin 15** | **Contour with margin 30** |
-|--------------------|---------------------------|----------------------------|----------------------------|
-| ![](assets/phil.png) | ![](assets/phil_0.svg)  | ![](assets/phil_15.svg) | ![](assets/phil_30.svg) |
+| **Original image** | **Contour with margin 0** | **Contour with margin 10** |
+|--------------------|---------------------------|----------------------------|
+| ![](assets/phil.png) | ![](assets/phil_0.svg)  | ![](assets/phil_10.svg) |
 
 <!-- ## How it works
 
