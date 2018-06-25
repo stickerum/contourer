@@ -1,6 +1,6 @@
 # Development
 
-To run your local copy of Contourer for development follow these steps
+Run your local copy of Contourer for development
 
 ## Install
 
