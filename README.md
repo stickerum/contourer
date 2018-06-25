@@ -42,7 +42,7 @@ You can set `margin` (default: `0`).
 
 ## Improvements
 
-Fork me and feel free to ask questions, report bugs and open pull requests. Check out [developer's guide](docs/how-it-works.md).
+Fork me and feel free to ask questions, report bugs and open pull requests. Check out [developer's guide](docs/development.md).
 
 ## License
 
