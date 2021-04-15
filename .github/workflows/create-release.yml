@@ -39,8 +39,8 @@ jobs:
           script: |
             core.setFailed('No version changes. ${{ steps.packageOld.outputs.version }}')
 
-  # Create a new draft release
-  release-draft:
+  # Create a new release
+  release:
     needs: check-version-changing
     runs-on: ubuntu-latest
     steps:
