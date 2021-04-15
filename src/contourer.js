@@ -306,7 +306,7 @@ class Contourer {
 
   /**
    * @async
-   * Append encoded image to the end of SVG body
+   * Insert encoded image at the beginning of SVG body
    */
   async mergeSvgAndEncodedBitmapImage() {
     await log.info('Merge SVG and encoded image');
@@ -324,10 +324,16 @@ class Contourer {
     let imageTag = `<image width="${this.size.width}" height="${this.size.height}" xlink:href="${this.encodedImage}" />`;
 
     /**
-     * Add image tag at the end of SVG body
+     * Fix path stroke width
      * @type {string}
      */
-    result = result.replace('</svg>', `${imageTag}</svg>`);
+    result = result.replace('<path ', '<path stroke-width="0.25" ');
+
+    /**
+     * Add image tag just before path
+     * @type {string}
+     */
+    result = result.replace('<path', `${imageTag}\n<path`);
 
     this.resultSVG = result;
   }
