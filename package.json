@@ -1,10 +1,10 @@
 {
   "name": "Contourer",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Tool for creating svg of base64-encoded image and its contour",
   "scripts": {
     "start": "node src/index.js",
-    "pack": "pkg src/index.js --output ./build/contourer -t linux,macos,win"
+    "pack-app": "pkg src/index.js --output ./build/contourer -t linux,macos,win"
   },
   "author": {
     "name": "Taly Guryn",
