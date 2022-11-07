@@ -13,7 +13,7 @@
   "license": "GPL-2.0",
   "dependencies": {
     "jimp": "^0.2.28",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "node-base64-image": "^1.0.5",
     "potrace": "git+https://github.com/stickerum/node-potrace.git",
     "simple-node-logger": "^0.93.37",
